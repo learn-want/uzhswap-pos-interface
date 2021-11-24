@@ -1,3 +1,4 @@
+import { SupportedChainId } from 'constants/chains'
 import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader'
 import { Route, Switch } from 'react-router-dom'
 import styled from 'styled-components/macro'
@@ -9,6 +10,7 @@ import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
+import { useActiveWeb3React } from '../hooks/web3'
 import { useModalOpen, useToggleModal } from '../state/application/hooks'
 import { ApplicationModal } from '../state/application/reducer'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
@@ -72,6 +74,8 @@ function TopLevelModals() {
 }
 
 export default function App() {
+  const { chainId } = useActiveWeb3React()
+
   return (
     <ErrorBoundary>
       <Route component={GoogleAnalyticsReporter} />
@@ -102,7 +106,7 @@ export default function App() {
               <Route exact strict path="/pool" component={Pool} />
               <Route exact strict path="/pool/:tokenId" component={PositionPage} />
 
-              <Route exact strict path="/faucet" component={Faucet} />
+              {chainId === SupportedChainId.UZH && <Route exact strict path="/faucet" component={Faucet} />}
 
               <Route exact strict path="/add/v2/:currencyIdA?/:currencyIdB?" component={RedirectDuplicateTokenIdsV2} />
               <Route

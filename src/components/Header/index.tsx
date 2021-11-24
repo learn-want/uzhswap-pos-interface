@@ -295,9 +295,11 @@ export default function Header() {
             <Trans>Vote</Trans>
           </StyledNavLink>
         )}
-        <StyledNavLink id={`faucet-nav-link`} to={'/faucet'}>
-          <Trans>Faucet</Trans>
-        </StyledNavLink>
+        {chainId === SupportedChainId.UZH && (
+          <StyledNavLink id={`faucet-nav-link`} to={'/faucet'}>
+            <Trans>Faucet</Trans>
+          </StyledNavLink>
+        )}
       </HeaderLinks>
 
       <HeaderControls>
