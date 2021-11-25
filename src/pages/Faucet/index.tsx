@@ -1,18 +1,14 @@
 import { Trans } from '@lingui/macro'
 import { useState } from 'react'
-import { ChevronDown } from 'react-feather'
 import styled from 'styled-components/macro'
 
-import { FaucetContract } from '../../abis/types'
 import { ButtonSecondary } from '../../components/Button'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
+import { ColumnCenter } from '../../components/Column'
 import FaucetAddressInputPanel from '../../components/faucet/FaucetAddressInputPanel'
 import FaucetDropDown from '../../components/faucet/FaucetDropDown'
 import { RowBetween } from '../../components/Row'
 import { useFaucetContract } from '../../hooks/useContract'
-import { useActiveWeb3React } from '../../hooks/web3'
 import { useSingleCallResult } from '../../state/multicall/hooks'
-import { useDefaultsFromURLSearch } from '../../state/swap/hooks'
 import { TYPE } from '../../theme'
 
 const TitleRow = styled(RowBetween)`
@@ -43,7 +39,6 @@ export const Wrapper = styled.div`
 const FormWrapper = styled.div`
   width: 100%;
   position: relative;
-  //flex: 1;
   background: ${({ theme }) => theme.bg0};
   padding: 1rem;
   border-radius: 1.25rem;
@@ -113,8 +108,6 @@ export default function Faucet() {
   const faucetState = useSingleCallResult(faucetContract, 'claim', [selectedTokenAddress])
 
   const claimTokenFaucet = async () => {
-    console.log(faucetState)
-    console.log(faucetContract)
     if (faucetContract && faucetState.valid) {
       await faucetContract.claim(selectedTokenAddress)
     } else {

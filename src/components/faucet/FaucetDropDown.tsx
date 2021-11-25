@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { ChevronDown } from 'react-feather'
 import styled from 'styled-components/macro'
 
 interface DropDownProps {
@@ -116,17 +117,16 @@ export default function FaucetDropDown({
     <DropDownContainer>
       <div style={{ width: '100%' }}>
         <DropDownHeader onClick={toggling}>
-          {
-            <span style={{ width: '100%', textAlign: 'left', padding: '8px', position: 'relative' }}>
-              {selectedOption}
-            </span>
-          }
+          <span style={{ width: '100%', textAlign: 'left', padding: '8px', position: 'relative' }}>
+            {selectedOption}
+          </span>
+          <ChevronDown size={15} />
         </DropDownHeader>
         {isOpen && (
           <DropDownListContainer>
             <DropDownList>
               {availableTokens.map((token: { name: string; address: string; logo: string }) => (
-                <ListItem onClick={onOptionClicked(token)} key={Math.random()}>
+                <ListItem onClick={onOptionClicked(token)} key={token.address}>
                   <span>{token.name}</span>
                 </ListItem>
               ))}
