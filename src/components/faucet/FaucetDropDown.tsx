@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import styled from 'styled-components/macro'
 
 interface DropDownProps {
   currentToken: string
   updateCurrentToken: React.Dispatch<React.SetStateAction<string>>
+  currentTokenAddress: string
   updateSelectedTokenAddress: React.Dispatch<React.SetStateAction<string>>
-  availableTokens: { address: string; name: string; logo: string }[]
+  availableTokens: { address: string; name: string }[]
 }
 
 const DropDownContainer = styled('div')`
@@ -97,27 +98,34 @@ const ListItem = styled('span')`
 export default function FaucetDropDown({
   currentToken,
   updateCurrentToken,
+  currentTokenAddress,
   updateSelectedTokenAddress,
   availableTokens,
 }: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(currentToken)
 
-  const toggling = () => setIsOpen(!isOpen)
+  const toggling = useCallback(() => setIsOpen((o) => !o), [])
 
-  const onOptionClicked = (value: { name: string; address: string; logo: string }) => () => {
-    setSelectedOption(value.name)
-    setIsOpen(false)
+  const onOptionClicked = useCallback(
+    (value: { name: string; address: string }) => {
+      setSelectedOption(value.name)
+      setIsOpen(false)
 
-    updateCurrentToken(value.name)
-    updateSelectedTokenAddress(value.address)
-  }
+      updateCurrentToken(value.name)
+      updateSelectedTokenAddress(value.address)
+    },
+    [updateCurrentToken, updateSelectedTokenAddress]
+  )
 
   return (
     <DropDownContainer>
       <div style={{ width: '100%' }}>
         <DropDownHeader onClick={toggling}>
-          <span style={{ width: '100%', textAlign: 'left', padding: '8px', position: 'relative' }}>
+          <span
+            id={currentTokenAddress}
+            style={{ width: '100%', textAlign: 'left', padding: '8px', position: 'relative' }}
+          >
             {selectedOption}
           </span>
           <ChevronDown size={15} />
@@ -125,8 +133,8 @@ export default function FaucetDropDown({
         {isOpen && (
           <DropDownListContainer>
             <DropDownList>
-              {availableTokens.map((token: { name: string; address: string; logo: string }) => (
-                <ListItem onClick={onOptionClicked(token)} key={token.address}>
+              {availableTokens.map((token: { name: string; address: string }) => (
+                <ListItem onClick={() => onOptionClicked(token)} key={token.address}>
                   <span>{token.name}</span>
                 </ListItem>
               ))}
