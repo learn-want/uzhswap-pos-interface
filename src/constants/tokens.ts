@@ -9,21 +9,21 @@ uzh swap tokens
 
 export const UZHUNI = new Token(
   SupportedChainId.UZH,
-  '0xd0948BF75F37679ae6F10589a05E014A8Bd70630',
+  '0x5c12cebf2722b71a3C85419fA5EE5939D5b06da7',
   18,
   'UZHUNI',
   'UZHUniToken'
 )
 export const UZHSUSHI = new Token(
   SupportedChainId.UZH,
-  '0x2FBD50A221E7fD24270ef3EbA9357f4ef01b6C85',
+  '0xb0a1c60eB1dCa3E99Ba232c331a4Ec6EEd31410A',
   18,
   'UZHSUS',
   'UZHSushiToken'
 )
 export const UZHCRO = new Token(
   SupportedChainId.UZH,
-  '0xbc03c6fB1fCe0027C21126a51c6175890971A2F9',
+  '0x01209c5ec19DDd983D9e5Aa9bff2c741acB58A0D',
   18,
   'UZHCRO',
   'UZHCroToken'
@@ -31,7 +31,7 @@ export const UZHCRO = new Token(
 
 export const INCOINGNITO = new Token(
   SupportedChainId.UZH,
-  '0x82299e7E86353B248aeAe9Eb453953edAef7385d',
+  '0xD2Bf70a16f58A0cF712cF9a3A8C3A93a6cdf966e',
   18,
   'ICG',
   'Incoingnito '
@@ -39,7 +39,7 @@ export const INCOINGNITO = new Token(
 
 export const INTELLICOIN = new Token(
   SupportedChainId.UZH,
-  '0x856E6FB873282A59aA6fE32e013e3e1f4438c6A8',
+  '0x1eb3ab261A2bf7dBA1B5dd14bD6FCF163786DaA2',
   18,
   'ITC',
   'Intellicoin '
@@ -47,7 +47,7 @@ export const INTELLICOIN = new Token(
 
 export const PRIVATEPEDIA = new Token(
   SupportedChainId.UZH,
-  '0xE93f4F6ff8E841649C762D8f50f3a9acb1B67758',
+  '0xEA2A3cc2e42b4CcE1b879F58DEC102738F102065',
   18,
   'PVT',
   'Privatepedia '
@@ -55,7 +55,7 @@ export const PRIVATEPEDIA = new Token(
 
 export const COINICIOUS = new Token(
   SupportedChainId.UZH,
-  '0x388EE3B1843254A0D266392bD3bD0Ad95E86C8CF',
+  '0x68f3E281C9742448fdc6e2ea6e2fc817bEA47253',
   18,
   'CNS',
   'Coinicious  '
@@ -63,7 +63,7 @@ export const COINICIOUS = new Token(
 
 export const CRYPTOOFFICIALCOIN = new Token(
   SupportedChainId.UZH,
-  '0xbA2AFd13C87011AaA12B6370c29590c3e29B59C8',
+  '0x927116E9C17Ab018b4fEaEbc2CE8197eB61ea50A',
   18,
   'COC',
   'Cryptofficailcoin  '
