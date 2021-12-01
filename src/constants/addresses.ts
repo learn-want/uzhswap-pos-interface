@@ -88,5 +88,5 @@ export const V3_MIGRATOR_ADDRESSES: AddressMap = constructSameAddressMap('0xA564
   SupportedChainId.ARBITRUM_RINKEBY,
 ])
 export const FAUCET_ADDRESSES: AddressMap = {
-  [SupportedChainId.UZH]: '0x94a2BAf44642989E785FbF58b54F3CBB0CfFba2C',
+  [SupportedChainId.UZH]: '0x6305d44b42Ce1BD7173740F602cf1C0FDf67ab6f',
 }
