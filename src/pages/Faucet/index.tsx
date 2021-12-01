@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import { Token } from '@uniswap/sdk-core'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components/macro'
 
 import { ButtonSecondary } from '../../components/Button'
@@ -8,6 +8,7 @@ import { ColumnCenter } from '../../components/Column'
 import FaucetDropDown from '../../components/faucet/FaucetDropDown'
 import FaucetTokenAddressPanel from '../../components/faucet/FaucetTokenAddressPanel'
 import { RowBetween } from '../../components/Row'
+import Tooltip, { MouseoverTooltip } from '../../components/Tooltip'
 import {
   COINICIOUS,
   CRYPTOOFFICIALCOIN,
@@ -21,6 +22,7 @@ import {
 import { useFaucetContract } from '../../hooks/useContract'
 import { useSingleCallResult } from '../../state/multicall/hooks'
 import { TYPE } from '../../theme'
+import { CustomLightSpinner } from '../../theme'
 
 const faucetTokens: Token[] = [
   UZHUNI,
@@ -78,21 +80,50 @@ const Form = styled.form`
   justify-content: center;
   padding: 8px;
 `
+const Feedback = styled.p`
+  color: ${({ theme }) => theme.primary1};
+`
 
 export default function Faucet() {
   const faucetContract = useFaucetContract()
 
+  const [claimable, setClaimable] = useState<boolean>(true)
+  const [claimFeedback, setClaimFeedback] = useState<string>('')
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(faucetTokens[0])
   const [selectedTokenAddress, setSelectedTokenAddress] = useState<string>(faucetTokens[0].address)
   const faucetState = useSingleCallResult(faucetContract, 'claim', [selectedTokenAddress])
 
-  const claimTokenFaucet = async () => {
+  const updateClaimTimeout = useCallback(async () => {
+    setClaimable(false)
+    setTimeout(() => {
+      setClaimable(true)
+      setClaimFeedback('')
+    }, 60000)
+  }, [])
+
+  const onClaimToken = useCallback(async () => {
     if (faucetContract && faucetState.valid) {
-      await faucetContract.claim(selectedTokenAddress)
+      try {
+        const claim = await faucetContract.claim(selectedTokenAddress)
+        console.log('selectedTokenAddress', selectedTokenAddress, '')
+        updateClaimTimeout()
+        setClaimFeedback(
+          `Your transaction has been submitted. This can take a moment. Afterwards, check your Meta Mask for more infos.
+           \n TX Hash: ${claim.hash}`
+        )
+      } catch (e) {
+        if (e.data.message === 'execution reverted: Faucet Timeout Limit: Try again later') {
+          // button is disabled for 60 seconds after claiming
+          setClaimFeedback(`Timeout Error try again in 60 seconds!`)
+        } else {
+          setClaimFeedback(`Error: ${e.message}`)
+        }
+      }
     } else {
+      setClaimFeedback(`Something went wrong!`)
       throw new Error('Claim faucet did not work')
     }
-  }
+  }, [])
 
   return (
     <>
@@ -123,16 +154,42 @@ export default function Faucet() {
                   <FaucetTokenAddressPanel tokenAddress={selectedTokenAddress} />
                 </div>
               </div>
-              <div style={{ display: 'flex', width: '100%', gap: '30px', alignItems: 'center' }}>
-                <ButtonSecondary style={{ width: '30%', height: '60%' }} onClick={claimTokenFaucet}>
-                  Send request!
-                </ButtonSecondary>
-                <div style={{ width: '70%' }}>
-                  <Trans>How it works</Trans>
+              <div style={{ display: 'flex', gap: '30px', marginBottom: '40px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}>
+                  <Trans>How it works:</Trans>
                   <p>
-                    You can send a Faucet request every 60 seconds and, if not already done, import the token into
-                    Metamask with the provided token contract address
+                    You can send a request to the faucet every 60 seconds and, if not already done, import the token
+                    into Metamask with the provided token contract address. If the transaction was successfull you will
+                    find the claimed tokens in your MetaMask wallet.
                   </p>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '30px',
+                  marginBottom: '40px',
+                  width: '40%',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                }}
+              >
+                <ButtonSecondary disabled={!claimable} style={{ width: '100%', height: '60%' }} onClick={onClaimToken}>
+                  {claimable ? 'claim tokens' : 'claim timeout'}
+                </ButtonSecondary>
+              </div>
+              <div style={{ display: 'flex', width: '60%', gap: '30px', alignItems: 'center', alignSelf: 'center' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    gap: '8px',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                  }}
+                >
+                  <Feedback>{claimFeedback}</Feedback>
                 </div>
               </div>
             </Form>

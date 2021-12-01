@@ -1,7 +1,9 @@
 import { Trans } from '@lingui/macro'
+import { useCallback, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components/macro'
 
 import { AutoColumn } from '../Column'
+import Tooltip, { MouseoverTooltip } from '../Tooltip'
 
 const TokenAddressPanel = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap}
@@ -10,6 +12,10 @@ const TokenAddressPanel = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   z-index: 1;
   width: 100%;
+
+  :hover {
+    cursor: pointer;
+  }
 `
 
 const ContainerRow = styled.div`
@@ -51,22 +57,30 @@ const TokenAddress = styled.div`
   }
 `
 export default function FaucetTokenAddressPanel({ tokenAddress }: { tokenAddress: string }) {
+  const [tooltipText, setTooltipText] = useState<string>('Click to copy to clipboard.')
+
+  const copiedFeedback = useCallback(async () => {
+    await navigator.clipboard.writeText(tokenAddress)
+    const beforeTooltipText = tooltipText
+    setTooltipText('COPIED TO CLIPBOARD!')
+    setTimeout(() => {
+      setTooltipText(beforeTooltipText)
+    }, 2000)
+  }, [])
+
   return (
-    <TokenAddressPanel
-      // TODO add tooltip
-      onClick={async () => {
-        await navigator.clipboard.writeText(tokenAddress)
-      }}
-    >
-      <ContainerRow>
-        <TokenAddressContainer>
-          <AutoColumn gap="md">
-            <TokenAddress>
-              <Trans>{tokenAddress}</Trans>
-            </TokenAddress>
-          </AutoColumn>
-        </TokenAddressContainer>
-      </ContainerRow>
-    </TokenAddressPanel>
+    <MouseoverTooltip text={<Trans>{tooltipText}</Trans>}>
+      <TokenAddressPanel onClick={copiedFeedback}>
+        <ContainerRow>
+          <TokenAddressContainer>
+            <AutoColumn gap="md">
+              <TokenAddress>
+                <Trans>{tokenAddress}</Trans>
+              </TokenAddress>
+            </AutoColumn>
+          </TokenAddressContainer>
+        </ContainerRow>
+      </TokenAddressPanel>
+    </MouseoverTooltip>
   )
 }
