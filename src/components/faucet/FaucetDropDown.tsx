@@ -1,13 +1,14 @@
+import { Token } from '@uniswap/sdk-core'
 import React, { useCallback, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import styled from 'styled-components/macro'
 
 interface DropDownProps {
-  currentToken: string
-  updateCurrentToken: React.Dispatch<React.SetStateAction<string>>
+  currentToken: Token | undefined
+  updateCurrentToken: React.Dispatch<React.SetStateAction<Token | undefined>>
   currentTokenAddress: string
   updateSelectedTokenAddress: React.Dispatch<React.SetStateAction<string>>
-  availableTokens: { address: string; name: string }[]
+  availableTokens: Token[]
 }
 
 const DropDownContainer = styled('div')`
@@ -40,6 +41,7 @@ const DropDownHeader = styled.button`
   font-size: 1.25rem;
   font-weight: 500;
   color: ${({ theme }) => theme.text1};
+
   :hover {
     cursor: pointer;
     text-decoration: none;
@@ -77,6 +79,7 @@ const DropDownList = styled('div')`
   color: #3faffa;
   font-size: 1.3rem;
   font-weight: 500;
+
   &:first-child {
     padding-top: 0.8em;
   }
@@ -86,11 +89,13 @@ const ListItem = styled('span')`
   list-style: none;
   margin-bottom: 0.8em;
   color: ${({ theme }) => theme.text2};
+
   :hover {
     color: ${({ theme }) => theme.text1};
     cursor: pointer;
     text-decoration: none;
   }
+
   padding: 0.5rem 0.5rem;
   font-size: 1.25rem;
 `
@@ -103,20 +108,16 @@ export default function FaucetDropDown({
   availableTokens,
 }: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState(currentToken)
+  const [selectedOption, setSelectedOption] = useState<string | undefined>(currentToken?.name)
 
   const toggling = useCallback(() => setIsOpen((o) => !o), [])
 
-  const onOptionClicked = useCallback(
-    (value: { name: string; address: string }) => {
-      setSelectedOption(value.name)
-      setIsOpen(false)
-
-      updateCurrentToken(value.name)
-      updateSelectedTokenAddress(value.address)
-    },
-    [updateCurrentToken, updateSelectedTokenAddress]
-  )
+  const onOptionClicked = useCallback((value: Token) => {
+    setSelectedOption(value.name)
+    setIsOpen(false)
+    updateCurrentToken(value)
+    updateSelectedTokenAddress(value.address)
+  }, [])
 
   return (
     <DropDownContainer>
@@ -133,7 +134,7 @@ export default function FaucetDropDown({
         {isOpen && (
           <DropDownListContainer>
             <DropDownList>
-              {availableTokens.map((token: { name: string; address: string }) => (
+              {availableTokens.map((token: Token) => (
                 <ListItem onClick={() => onOptionClicked(token)} key={token.address}>
                   <span>{token.name}</span>
                 </ListItem>

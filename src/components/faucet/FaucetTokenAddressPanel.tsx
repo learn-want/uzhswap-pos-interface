@@ -52,7 +52,12 @@ const TokenAddress = styled.div`
 `
 export default function FaucetTokenAddressPanel({ tokenAddress }: { tokenAddress: string }) {
   return (
-    <TokenAddressPanel>
+    <TokenAddressPanel
+      // TODO add tooltip
+      onClick={async () => {
+        await navigator.clipboard.writeText(tokenAddress)
+      }}
+    >
       <ContainerRow>
         <TokenAddressContainer>
           <AutoColumn gap="md">
