@@ -50,7 +50,7 @@ const TokenAddress = styled.div`
     -webkit-appearance: none;
   }
 `
-export default function FaucetAddressInputPanel({ tokenAddress }: { tokenAddress: string }) {
+export default function FaucetTokenAddressPanel({ tokenAddress }: { tokenAddress: string }) {
   return (
     <TokenAddressPanel>
       <ContainerRow>
