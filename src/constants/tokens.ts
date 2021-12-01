@@ -66,7 +66,7 @@ export const CRYPTOOFFICIALCOIN = new Token(
   '0x927116E9C17Ab018b4fEaEbc2CE8197eB61ea50A',
   18,
   'COC',
-  'Cryptofficailcoin  '
+  'Cryptofficialcoin  '
 )
 
 /*
