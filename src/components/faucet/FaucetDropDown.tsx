@@ -115,6 +115,7 @@ export default function FaucetDropDown({
   const onOptionClicked = useCallback((value: Token) => {
     setSelectedOption(value.name)
     setIsOpen(false)
+    // TODO fix this as they are not updating correctly on with the dropdown menu!
     updateCurrentToken(value)
     updateSelectedTokenAddress(value.address)
   }, [])
