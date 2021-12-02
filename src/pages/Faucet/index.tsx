@@ -104,7 +104,7 @@ export default function Faucet() {
           <TitleRow style={{ marginTop: '1rem', justifyContent: 'center', marginBottom: '1rem' }} padding={'0'}>
             <TYPE.body fontSize={'20px'} style={{ justifyContent: 'center' }}>
               <UniIcon>
-                <Logo fill={darkMode ? white : black} width="100px" height="100%" title="logo" />
+                <Logo fill={darkMode ? white : black} width="175" height="100%" title="logo" />
               </UniIcon>
             </TYPE.body>
           </TitleRow>

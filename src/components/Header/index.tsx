@@ -13,7 +13,7 @@ import { useDarkModeManager } from 'state/user/hooks'
 import { useETHBalances } from 'state/wallet/hooks'
 import styled from 'styled-components/macro'
 
-import { ReactComponent as Logo } from '../../assets/svg/logo.svg'
+import { ReactComponent as Logo } from '../../assets/svg/uzh-logo.svg'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { ExternalLink, TYPE } from '../../theme'
 import ClaimModal from '../claim/ClaimModal'
@@ -78,6 +78,7 @@ const HeaderElement = styled.div`
   }
 
   /* addresses safari's lack of support for "gap" */
+
   & > *:not(:first-child) {
     margin-left: 8px;
   }
@@ -171,6 +172,7 @@ const Title = styled.a`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     justify-self: center;
   `};
+
   :hover {
     cursor: pointer;
   }
@@ -178,6 +180,7 @@ const Title = styled.a`
 
 const UniIcon = styled.div`
   transition: transform 0.3s ease;
+
   :hover {
     transform: rotate(-5deg);
   }
@@ -201,6 +204,7 @@ const StyledNavLink = styled(NavLink).attrs({
   word-break: break-word;
   overflow: hidden;
   white-space: nowrap;
+
   &.${activeClassName} {
     border-radius: 12px;
     font-weight: 600;

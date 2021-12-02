@@ -196,6 +196,6 @@ export const UniIcon = styled.div`
   transition: transform 0.3s ease;
 
   :hover {
-    transform: rotate(-5deg);
+    transform: rotate(-10deg);
   }
 `
