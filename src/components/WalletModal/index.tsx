@@ -6,7 +6,7 @@ import { AutoColumn } from 'components/Column'
 import { PrivacyPolicy } from 'components/PrivacyPolicy'
 import Row, { AutoRow, RowBetween } from 'components/Row'
 import { useWalletConnectMonitoringEventCallback } from 'hooks/useMonitoringEventCallback'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, Info } from 'react-feather'
 import ReactGA from 'react-ga'
 import styled from 'styled-components/macro'
@@ -22,6 +22,7 @@ import { ApplicationModal } from '../../state/application/reducer'
 import { ExternalLink, TYPE } from '../../theme'
 import { isMobile } from '../../utils/userAgent'
 import AccountDetails from '../AccountDetails'
+import { ButtonPrimary } from '../Button'
 import Card, { LightCard } from '../Card'
 import Modal from '../Modal'
 import Option from './Option'
@@ -35,6 +36,10 @@ const CloseIcon = styled.div`
     cursor: pointer;
     opacity: 0.6;
   }
+`
+
+const Spacer = styled.div`
+  padding-top: 20px;
 `
 
 const CloseColor = styled(Close)`
@@ -307,6 +312,28 @@ export default function WalletModal({
     })
   }
 
+  const [showNetworkInfo, setShowNetworkInfo] = useState(false)
+
+  const addUzhNetwork = useCallback(() => {
+    setShowNetworkInfo(false)
+    if (window.ethereum) {
+      window.ethereum
+        // @ts-ignore
+        .request({
+          method: 'wallet_switchEthereumChain',
+          params: [
+            {
+              chainId: '0x2BE',
+            },
+          ],
+        })
+        .catch((error: any) => {
+          setShowNetworkInfo(true)
+          console.log(error)
+        })
+    }
+  }, [])
+
   function getModalContent() {
     if (error) {
       return (
@@ -320,7 +347,26 @@ export default function WalletModal({
           <ContentWrapper>
             {error instanceof UnsupportedChainIdError ? (
               <h5>
-                <Trans>Please connect to the appropriate Ethereum network.</Trans>
+                {showNetworkInfo ? (
+                  <>
+                    <Trans>You do not have UZHETH configured. Please add following Network to your Wallet.</Trans>
+                    <Spacer />
+                    <div>
+                      <strong>Network Name: </strong> UZHETH <br />
+                      <strong>RPC URL: </strong> http://uzheth.business.uzh.ch:8545 <br />
+                      <strong>Chain ID: </strong> 702 <br />
+                      <strong>Currency Symbol: </strong> UZHETH <br />
+                    </div>
+                    <Spacer />
+                    <ButtonPrimary onClick={addUzhNetwork}>Try again</ButtonPrimary>
+                  </>
+                ) : (
+                  <>
+                    <Trans>Please connect to the UZH Ethereum network.</Trans>
+                    <Spacer />
+                    <ButtonPrimary onClick={addUzhNetwork}>Switch to UZH Network</ButtonPrimary>
+                  </>
+                )}
               </h5>
             ) : (
               <Trans>Error connecting. Try refreshing the page.</Trans>

@@ -4,8 +4,6 @@ import { Currency, Token } from '@uniswap/sdk-core'
 import { SupportedChainId } from './chains'
 import {
   AMPL,
-  COINICIOUS,
-  CRYPTOOFFICIALCOIN,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_OPTIMISM,
@@ -14,12 +12,8 @@ import {
   FEI,
   FRAX,
   FXS,
-  INCOINGNITO,
-  INTELLICOIN,
-  PRIVATEPEDIA,
   renBTC,
   TRIBE,
-  UNI,
   USDC,
   USDC_ARBITRUM,
   USDC_OPTIMISM,
