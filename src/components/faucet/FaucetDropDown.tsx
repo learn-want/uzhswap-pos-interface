@@ -1,99 +1,22 @@
+import { Token } from '@uniswap/sdk-core'
 import React, { useCallback, useState } from 'react'
 import { ChevronDown } from 'react-feather'
-import styled from 'styled-components/macro'
+
+import {
+  DropDownContainer,
+  DropDownHeader,
+  DropDownList,
+  DropDownListContainer,
+  ListItem,
+} from './styled-faucet-components'
 
 interface DropDownProps {
-  currentToken: string
-  updateCurrentToken: React.Dispatch<React.SetStateAction<string>>
+  currentToken: Token | undefined
+  updateCurrentToken: React.Dispatch<React.SetStateAction<Token | undefined>>
   currentTokenAddress: string
   updateSelectedTokenAddress: React.Dispatch<React.SetStateAction<string>>
-  availableTokens: { address: string; name: string }[]
+  availableTokens: Token[]
 }
-
-const DropDownContainer = styled('div')`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto;
-  text-align: left;
-  border-radius: 1.25rem;
-  background-color: ${({ theme }) => theme.bg1};
-`
-
-const DropDownHeader = styled.button`
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: transparent;
-  margin: 0;
-  border-radius: 1.25rem;
-  border: 1px solid ${({ theme }) => theme.bg2};
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
-  justify-content: space-between;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text1};
-  :hover {
-    cursor: pointer;
-    text-decoration: none;
-  }
-`
-
-const DropDownListContainer = styled('div')`
-  position: absolute;
-  width: 100%;
-  background-color: ${({ theme }) => theme.bg1};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
-  border: 1px solid ${({ theme }) => theme.bg0};
-  border-radius: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
-  z-index: 100;
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    bottom: unset;
-    right: 0;
-    left: unset;
-  `};
-`
-
-const DropDownList = styled('div')`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  padding-left: 1em;
-  box-sizing: border-box;
-  color: #3faffa;
-  font-size: 1.3rem;
-  font-weight: 500;
-  &:first-child {
-    padding-top: 0.8em;
-  }
-`
-
-const ListItem = styled('span')`
-  list-style: none;
-  margin-bottom: 0.8em;
-  color: ${({ theme }) => theme.text2};
-  :hover {
-    color: ${({ theme }) => theme.text1};
-    cursor: pointer;
-    text-decoration: none;
-  }
-  padding: 0.5rem 0.5rem;
-  font-size: 1.25rem;
-`
 
 export default function FaucetDropDown({
   currentToken,
@@ -103,16 +26,15 @@ export default function FaucetDropDown({
   availableTokens,
 }: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState(currentToken)
+  const [selectedOption, setSelectedOption] = useState<string | undefined>(currentToken?.name)
 
   const toggling = useCallback(() => setIsOpen((o) => !o), [])
 
   const onOptionClicked = useCallback(
-    (value: { name: string; address: string }) => {
+    (value: Token) => {
       setSelectedOption(value.name)
       setIsOpen(false)
-
-      updateCurrentToken(value.name)
+      updateCurrentToken(value)
       updateSelectedTokenAddress(value.address)
     },
     [updateCurrentToken, updateSelectedTokenAddress]
@@ -121,7 +43,13 @@ export default function FaucetDropDown({
   return (
     <DropDownContainer>
       <div style={{ width: '100%' }}>
-        <DropDownHeader onClick={toggling}>
+        <DropDownHeader
+          onClick={(e) => {
+            // prevent page reload
+            e.preventDefault()
+            toggling()
+          }}
+        >
           <span
             id={currentTokenAddress}
             style={{ width: '100%', textAlign: 'left', padding: '8px', position: 'relative' }}
@@ -133,8 +61,15 @@ export default function FaucetDropDown({
         {isOpen && (
           <DropDownListContainer>
             <DropDownList>
-              {availableTokens.map((token: { name: string; address: string }) => (
-                <ListItem onClick={() => onOptionClicked(token)} key={token.address}>
+              {availableTokens.map((token: Token) => (
+                <ListItem
+                  onClick={(e) => {
+                    // prevent page reload
+                    e.preventDefault()
+                    onOptionClicked(token)
+                  }}
+                  key={token.address}
+                >
                   <span>{token.name}</span>
                 </ListItem>
               ))}
