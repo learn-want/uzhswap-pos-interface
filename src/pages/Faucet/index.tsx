@@ -1,14 +1,20 @@
 import { Trans } from '@lingui/macro'
 import { Token } from '@uniswap/sdk-core'
 import { useCallback, useState } from 'react'
-import styled from 'styled-components/macro'
 
+import { ReactComponent as Logo } from '../../assets/svg/uzh-logo.svg'
 import { ButtonSecondary } from '../../components/Button'
 import { ColumnCenter } from '../../components/Column'
 import FaucetDropDown from '../../components/faucet/FaucetDropDown'
 import FaucetTokenAddressPanel from '../../components/faucet/FaucetTokenAddressPanel'
-import { RowBetween } from '../../components/Row'
-import Tooltip, { MouseoverTooltip } from '../../components/Tooltip'
+import {
+  Feedback,
+  Form,
+  FormWrapper,
+  TitleRow,
+  UniIcon,
+  Wrapper,
+} from '../../components/faucet/styled-faucet-components'
 import {
   COINICIOUS,
   CRYPTOOFFICIALCOIN,
@@ -20,9 +26,14 @@ import {
   UZHUNI,
 } from '../../constants/tokens'
 import { useFaucetContract } from '../../hooks/useContract'
+import useTheme from '../../hooks/useTheme'
 import { useSingleCallResult } from '../../state/multicall/hooks'
+import { useDarkModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { CustomLightSpinner } from '../../theme'
+
+/*
+IMPORT TOKENS
+ */
 
 const faucetTokens: Token[] = [
   UZHUNI,
@@ -35,65 +46,20 @@ const faucetTokens: Token[] = [
   PRIVATEPEDIA,
 ]
 
-const TitleRow = styled(RowBetween)`
-  color: ${({ theme }) => theme.text2};
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    flex-wrap: wrap;
-    gap: 12px;
-    width: 100%;
-  `};
-`
-export const Wrapper = styled.div`
-  display: flex;
-  position: relative;
-  padding: 8px;
-  max-width: 870px;
-  width: 100%;
-  align-items: center;
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    max-width: 800px;
-  `};
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    max-width: 500px;
-  `};
-`
-
-const FormWrapper = styled.div`
-  width: 100%;
-  position: relative;
-  background: ${({ theme }) => theme.bg0};
-  padding: 1rem;
-  border-radius: 1.25rem;
-`
-
-const Form = styled.form`
-  ${({ theme }) => theme.flexColumnNoWrap}
-  position: relative;
-  border-radius: 1.25rem;
-  background-color: ${({ theme }) => theme.bg0};
-  z-index: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 8px;
-`
-const Feedback = styled.p`
-  color: ${({ theme }) => theme.primary1};
-`
-
 export default function Faucet() {
+  const [darkMode] = useDarkModeManager()
+  const { white, black } = useTheme()
   const faucetContract = useFaucetContract()
-
   const [claimable, setClaimable] = useState<boolean>(true)
   const [claimFeedback, setClaimFeedback] = useState<string>('')
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(faucetTokens[0])
   const [selectedTokenAddress, setSelectedTokenAddress] = useState<string>(faucetTokens[0].address)
   const faucetState = useSingleCallResult(faucetContract, 'claim', [selectedTokenAddress])
 
-  const updateClaimTimeout = useCallback(async () => {
+  /*
+  handle request timeout of 60 seconds
+   */
+  const updateClaimTimeout = useCallback(() => {
     setClaimable(false)
     setTimeout(() => {
       setClaimable(true)
@@ -101,39 +67,53 @@ export default function Faucet() {
     }, 60000)
   }, [])
 
+  /*
+  handle token claim
+   */
   const onClaimToken = useCallback(async () => {
     if (faucetContract && faucetState.valid) {
       try {
         const claim = await faucetContract.claim(selectedTokenAddress)
-        console.log('selectedTokenAddress', selectedTokenAddress, '')
         updateClaimTimeout()
         setClaimFeedback(
           `Your transaction has been submitted. This can take a moment. Afterwards, check your Meta Mask for more infos.
            \n TX Hash: ${claim.hash}`
         )
       } catch (e) {
-        if (e.data.message === 'execution reverted: Faucet Timeout Limit: Try again later') {
-          // button is disabled for 60 seconds after claiming
-          setClaimFeedback(`Timeout Error try again in 60 seconds!`)
-        } else {
-          setClaimFeedback(`Error: ${e.message}`)
+        try {
+          if (e.code === 4001) {
+            setClaimFeedback(e.message)
+          } else if (e.data.message === 'execution reverted: Faucet Timeout Limit: Try again later') {
+          } else {
+            console.debug('Error:', e)
+            setClaimFeedback(`Error: ${e.message}`)
+          }
+        } catch (e) {
+          setClaimFeedback(`Unexpected error: ${e}`)
         }
       }
     } else {
       setClaimFeedback(`Something went wrong!`)
-      throw new Error('Claim faucet did not work')
     }
-  }, [])
+  }, [faucetContract, faucetState.valid, selectedTokenAddress, updateClaimTimeout])
 
   return (
     <>
       <Wrapper>
         <ColumnCenter style={{ justifyContent: 'center' }}>
+          <TitleRow style={{ marginTop: '1rem', justifyContent: 'center', marginBottom: '1rem' }} padding={'0'}>
+            <TYPE.body fontSize={'20px'} style={{ justifyContent: 'center' }}>
+              <UniIcon>
+                <Logo fill={darkMode ? white : black} width="100px" height="100%" title="logo" />
+              </UniIcon>
+            </TYPE.body>
+          </TitleRow>
           <TitleRow style={{ marginTop: '1rem', justifyContent: 'center', marginBottom: '2rem' }} padding={'0'}>
             <TYPE.body fontSize={'20px'} style={{ justifyContent: 'center' }}>
               <Trans>UZH Ethereum Faucet</Trans>
             </TYPE.body>
           </TitleRow>
+
           <FormWrapper>
             <Form>
               <div style={{ display: 'flex', gap: '30px', marginBottom: '40px' }}>
@@ -174,7 +154,15 @@ export default function Faucet() {
                   alignSelf: 'center',
                 }}
               >
-                <ButtonSecondary disabled={!claimable} style={{ width: '100%', height: '60%' }} onClick={onClaimToken}>
+                <ButtonSecondary
+                  disabled={!claimable}
+                  style={{ width: '100%', height: '60%' }}
+                  onClick={(e) => {
+                    // prevent page reload
+                    e.preventDefault()
+                    onClaimToken()
+                  }}
+                >
                   {claimable ? 'claim tokens' : 'claim timeout'}
                 </ButtonSecondary>
               </div>
