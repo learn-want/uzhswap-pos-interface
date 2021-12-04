@@ -23,9 +23,7 @@ export default function FaucetTokenAddressPanel({ tokenAddress }: { tokenAddress
         <ContainerRow>
           <TokenAddressContainer>
             <AutoColumn gap="md">
-              <TokenAddress>
-                <Trans>{tokenAddress}</Trans>
-              </TokenAddress>
+              <TokenAddress>{tokenAddress}</TokenAddress>
             </AutoColumn>
           </TokenAddressContainer>
         </ContainerRow>
