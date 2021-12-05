@@ -10,7 +10,7 @@
   "tokens": [
     {
       "chainId": 702,
-      "address": "0xd0948BF75F37679ae6F10589a05E014A8Bd70630",
+      "address": "0x5c12cebf2722b71a3C85419fA5EE5939D5b06da7",
       "name": "UZUniToken",
       "symbol": "UNI",
       "decimals": 18,
@@ -18,7 +18,7 @@
     },
     {
       "chainId": 702,
-      "address": "0x2FBD50A221E7fD24270ef3EbA9357f4ef01b6C85",
+      "address": "0xb0a1c60eB1dCa3E99Ba232c331a4Ec6EEd31410A",
       "name": "UZHSushiToken",
       "symbol": "UZHSUS",
       "decimals": 18,
@@ -26,7 +26,7 @@
     },
     {
       "chainId": 702,
-      "address": "0xbc03c6fB1fCe0027C21126a51c6175890971A2F9",
+      "address": "0x01209c5ec19DDd983D9e5Aa9bff2c741acB58A0D",
       "name": "UZHCroToken",
       "symbol": "UZHCRO",
       "decimals": 18,
@@ -34,7 +34,7 @@
     },
     {
       "chainId": 702,
-      "address": "0x82299e7E86353B248aeAe9Eb453953edAef7385d",
+      "address": "0xD2Bf70a16f58A0cF712cF9a3A8C3A93a6cdf966e",
       "name": "Incoingnito",
       "symbol": "ICG",
       "decimals": 18,
@@ -42,7 +42,7 @@
     },
     {
       "chainId": 702,
-      "address": "0x856E6FB873282A59aA6fE32e013e3e1f4438c6A8",
+      "address": "0x1eb3ab261A2bf7dBA1B5dd14bD6FCF163786DaA2",
       "name": "Intellicoin",
       "symbol": "ITC",
       "decimals": 18,
@@ -50,7 +50,7 @@
     },
     {
       "chainId": 702,
-      "address": "0xE93f4F6ff8E841649C762D8f50f3a9acb1B67758",
+      "address": "0xEA2A3cc2e42b4CcE1b879F58DEC102738F102065",
       "name": "Privatepedia",
       "symbol": "PVT",
       "decimals": 18,
@@ -58,7 +58,7 @@
     },
     {
       "chainId": 702,
-      "address": "0x388EE3B1843254A0D266392bD3bD0Ad95E86C8CF",
+      "address": "0x68f3E281C9742448fdc6e2ea6e2fc817bEA47253",
       "name": "Coinicious",
       "symbol": "CNS",
       "decimals": 18,
@@ -66,7 +66,7 @@
     },
     {
       "chainId": 702,
-      "address": "0xbA2AFd13C87011AaA12B6370c29590c3e29B59C8",
+      "address": "0x927116E9C17Ab018b4fEaEbc2CE8197eB61ea50A",
       "name": "Cryptofficailcoin",
       "symbol": "COC",
       "decimals": 18,
