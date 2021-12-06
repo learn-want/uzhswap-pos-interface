@@ -11,7 +11,7 @@
     {
       "chainId": 702,
       "address": "0x5c12cebf2722b71a3C85419fA5EE5939D5b06da7",
-      "name": "UZUniToken",
+      "name": "UZHUniToken",
       "symbol": "UNI",
       "decimals": 18,
       "logoURI": "https://ipfs.io/ipfs/QmeviQixXbRdgBczykx5H1Hpxksgt2tbZjtxiCCTLXdtps/uzhuni-logo.png"
@@ -67,7 +67,7 @@
     {
       "chainId": 702,
       "address": "0x927116E9C17Ab018b4fEaEbc2CE8197eB61ea50A",
-      "name": "Cryptofficailcoin",
+      "name": "Cryptofficialcoin",
       "symbol": "COC",
       "decimals": 18,
       "logoURI": "https://ipfs.io/ipfs/QmeviQixXbRdgBczykx5H1Hpxksgt2tbZjtxiCCTLXdtps/cryptofficial-logo.png"
