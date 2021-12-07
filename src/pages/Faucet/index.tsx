@@ -15,6 +15,7 @@ import {
   UniIcon,
   Wrapper,
 } from '../../components/faucet/styled-faucet-components'
+import { SupportedChainId } from '../../constants/chains'
 import {
   COINICIOUS,
   CRYPTOOFFICIALCOIN,
@@ -27,6 +28,7 @@ import {
 } from '../../constants/tokens'
 import { useFaucetContract } from '../../hooks/useContract'
 import useTheme from '../../hooks/useTheme'
+import { useActiveWeb3React } from '../../hooks/web3'
 import { useSingleCallResult } from '../../state/multicall/hooks'
 import { useDarkModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
@@ -55,6 +57,8 @@ export default function Faucet() {
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(faucetTokens[0])
   const [selectedTokenAddress, setSelectedTokenAddress] = useState<string>(faucetTokens[0].address)
   const faucetState = useSingleCallResult(faucetContract, 'claim', [selectedTokenAddress])
+  const { chainId } = useActiveWeb3React()
+  const isUzhNetwork = chainId === SupportedChainId.UZH
 
   /*
   handle request timeout of 60 seconds
@@ -155,7 +159,7 @@ export default function Faucet() {
                 }}
               >
                 <ButtonSecondary
-                  disabled={!claimable}
+                  disabled={!claimable || !isUzhNetwork}
                   style={{ width: '100%', height: '60%' }}
                   onClick={(e) => {
                     // prevent page reload
