@@ -1,4 +1,4 @@
-const UZHTOKEN_LIST = 'https://ipfs.io/ipfs/QmPmcCi1AK5G9WpMSa9Jtunqwk5KER9aknvTd9ViBhfRzm'
+const UZHTOKEN_LIST = 'https://ipfs.io/ipfs/QmfL92LmV6jyUFQRaxT5phzH4jUNdEm6MRrViN2hQekHCt'
 
 export const UNSUPPORTED_LIST_URLS: string[] = []
 

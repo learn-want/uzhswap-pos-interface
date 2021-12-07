@@ -20,9 +20,6 @@ import {
   USDT,
   USDT_ARBITRUM_ONE,
   USDT_OPTIMISM,
-  UZHCRO,
-  UZHSUSHI,
-  UZHUNI,
   WBTC,
   WBTC_ARBITRUM_ONE,
   WBTC_OPTIMISM,
@@ -78,13 +75,7 @@ export const CUSTOM_BASES: { [chainId: number]: { [tokenAddress: string]: Token[
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainCurrencyList = {
-  [SupportedChainId.UZH]: [
-    ExtendedEther.onChain(SupportedChainId.UZH),
-    WETH9_EXTENDED[SupportedChainId.UZH],
-    UZHSUSHI,
-    UZHCRO,
-    UZHUNI,
-  ],
+  [SupportedChainId.UZH]: [ExtendedEther.onChain(SupportedChainId.UZH), WETH9_EXTENDED[SupportedChainId.UZH]],
 
   [SupportedChainId.MAINNET]: [
     ExtendedEther.onChain(SupportedChainId.MAINNET),
